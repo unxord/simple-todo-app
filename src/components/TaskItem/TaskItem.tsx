@@ -8,6 +8,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { format, parseISO, isValid } from 'date-fns';
 
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
 interface TaskItemProps {
   task: ITask;
   onToggleComplete: (id: string) => void;
@@ -89,8 +92,28 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
   const formattedDate = task.dueDate ? formatDueDate(task.dueDate) : null;
   const chipColor = getPriorityChipColor(task.priority);
 
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: task.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.8 : 1,
+    zIndex: isDragging ? 10 : 'auto',
+  };
+
   return (
     <ListItem
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
       secondaryAction={
         <Box sx={{ display: 'flex', gap: 0.5 }}>
           {isEditing ? (
@@ -115,6 +138,14 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
         </Box>
       }
       disablePadding
+      sx={{
+        position: 'relative',
+        backgroundColor: isDragging ? 'action.hover' : 'transparent',
+        border: '1px dashed transparent',
+        '&:hover': {
+            borderColor: 'action.disabled',
+        }
+      }}
     >
       <ListItemIcon sx={{ minWidth: 0, mr: 1.5 }}>
         <Checkbox

@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ITask, PriorityLevel } from '../types';
 
+import { DragEndEvent } from '@dnd-kit/core';
+import { arrayMove } from '@dnd-kit/sortable';
+
 const LOCAL_STORAGE_KEY = 'react-todo-list-tasks';
 
 export function useTasks() {
@@ -73,6 +76,23 @@ export function useTasks() {
     );
   }, []);
 
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setTasks((currentTasks) => {
+        const oldIndex = currentTasks.findIndex((task) => task.id === active.id);
+        const newIndex = currentTasks.findIndex((task) => task.id === over.id);
+
+        if (oldIndex === -1 || newIndex === -1) {
+          return currentTasks;
+        }
+
+        return arrayMove(currentTasks, oldIndex, newIndex);
+      });
+    }
+  }, []);
+
   return {
     tasks,
     addTask,
@@ -81,5 +101,6 @@ export function useTasks() {
     editTask,
     setTaskDueDate,
     setTaskPriority,
+    handleDragEnd,
   };
 }

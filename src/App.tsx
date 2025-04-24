@@ -6,15 +6,7 @@ import { FilterValue } from './types';
 import { TaskFilter } from './components/TaskFilter/TaskFilter';
 import { ThemeProvider } from '@mui/material/styles';
 import { createAppTheme } from './theme/theme';
-import {
-  Container,
-  Typography,
-  CssBaseline,
-  Box,
-  AppBar,
-  Toolbar,
-  IconButton,
-} from '@mui/material';
+import { Container, Typography, CssBaseline, Box, AppBar, Toolbar, IconButton } from '@mui/material';
 
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
@@ -22,10 +14,12 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+
 const THEME_MODE_STORAGE_KEY = 'react-todo-app-theme-mode';
 
 const App: FC = () => {
-  const { tasks, addTask, toggleTaskCompletion, deleteTask, editTask } = useTasks();
+  const { tasks, addTask, toggleTaskCompletion, deleteTask, editTask, handleDragEnd } = useTasks();
   const [filter, setFilter] = useState<FilterValue>('all');
 
   const [mode, setMode] = useState<'light' | 'dark'>(() => {
@@ -54,6 +48,15 @@ const App: FC = () => {
     }
   });
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+        activationConstraint: {
+            distance: 8,
+        },
+    }),
+    useSensor(KeyboardSensor)
+  );
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <ThemeProvider theme={theme}>
@@ -68,23 +71,24 @@ const App: FC = () => {
             </IconButton>
           </Toolbar>
         </AppBar>
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+            <Typography variant="h4" component="h1" align="center" gutterBottom>
+              My Tasks
+            </Typography>
 
-        <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-          <Typography variant="h4" component="h1" align="center" gutterBottom>
-            My Tasks
-          </Typography>
-
-          <Box sx={{ mt: 3 }}>
-            <AddTaskForm onAddTask={addTask} />
-            <TaskFilter currentFilter={filter} onFilterChange={setFilter} />
-            <TaskList
-              tasks={filteredTasks}
-              onToggleComplete={toggleTaskCompletion}
-              onDelete={deleteTask}
-              onEdit={editTask}
-            />
-          </Box>
-        </Container>
+            <Box sx={{ mt: 3 }}>
+              <AddTaskForm onAddTask={addTask} />
+              <TaskFilter currentFilter={filter} onFilterChange={setFilter} />
+              <TaskList
+                tasks={filteredTasks}
+                onToggleComplete={toggleTaskCompletion}
+                onDelete={deleteTask}
+                onEdit={editTask}
+              />
+            </Box>
+          </Container>
+        </DndContext>
       </ThemeProvider>
     </LocalizationProvider>
   );
