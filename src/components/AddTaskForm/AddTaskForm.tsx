@@ -62,7 +62,10 @@ export const AddTaskForm: FC<AddTaskFormProps> = ({ onAddTask }) => {
         type="submit"
         variant="contained"
         size="large"
-        sx={{ flexShrink: 0 }}
+        sx={{
+            flexShrink: 0,
+            '& .MuiButton-startIcon': { margin: 0 }
+        }}
         startIcon={<AddCircleOutlineIcon />}
         aria-label="Add task"
       >
