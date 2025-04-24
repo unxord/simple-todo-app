@@ -1,18 +1,12 @@
 import React, { FC, memo, useState, useRef, useEffect } from 'react';
 import { ITask } from '../../types';
-import {
-  ListItem,
-  ListItemText,
-  Checkbox,
-  IconButton,
-  ListItemIcon,
-  TextField,
-  Box,
-} from '@mui/material';
+import { ListItem, ListItemText, Checkbox, IconButton, ListItemIcon, TextField, Box, Stack, Typography } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import { format, parseISO, isValid } from 'date-fns';
 
 interface TaskItemProps {
   task: ITask;
@@ -21,12 +15,7 @@ interface TaskItemProps {
   onEdit: (id: string, newText: string) => void;
 }
 
-const TaskItemComponent: FC<TaskItemProps> = ({
-  task,
-  onToggleComplete,
-  onDelete,
-  onEdit,
-}) => {
+const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete, onEdit }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(task.text);
   const editInputRef = useRef<HTMLInputElement>(null);
@@ -74,6 +63,21 @@ const TaskItemComponent: FC<TaskItemProps> = ({
         handleCancel();
     }
   };
+
+  const formatDueDate = (isoDate: string): string | null => {
+    try {
+        const dateObj = parseISO(isoDate);
+        if (isValid(dateObj)) {
+            return format(dateObj, 'PP');
+        }
+        return null;
+    } catch (error) {
+        console.error("Error parsing date:", error);
+        return null;
+    }
+  };
+
+  const formattedDate = task.dueDate ? formatDueDate(task.dueDate) : null;
 
   return (
     <ListItem
@@ -126,18 +130,22 @@ const TaskItemComponent: FC<TaskItemProps> = ({
              onBlur={handleSave}
          />
       ) : (
-        <ListItemText
-          id={`task-label-${task.id}`}
-          primary={task.text}
-          sx={{
+        <Stack sx={{ width: '100%', pr: 1, my: 0.5 }}>
+          <ListItemText id={`task-label-${task.id}`} primary={task.text} sx={{
             textDecoration: task.completed ? 'line-through' : 'none',
             color: task.completed ? 'text.disabled' : 'text.primary',
             wordBreak: 'break-word',
-            pr: 1,
-            mt: 1,
-            mb: 1,
-          }}
-        />
+              mt: 0,
+              mb: formattedDate ? 0 : 0,
+            }}
+          />
+          {formattedDate && (
+            <Typography variant="caption" display="flex" alignItems="center" color="text.secondary" sx={{ mt: 0.5 }}>
+              <CalendarTodayIcon sx={{ fontSize: '0.875rem', mr: 0.5 }} />
+              {formattedDate}
+            </Typography>
+          )}
+        </Stack>
       )}
     </ListItem>
   );

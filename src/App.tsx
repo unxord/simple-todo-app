@@ -19,6 +19,9 @@ import {
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
 const THEME_MODE_STORAGE_KEY = 'react-todo-app-theme-mode';
 
 const App: FC = () => {
@@ -52,7 +55,7 @@ const App: FC = () => {
   });
 
   return (
-    <>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AppBar position="static">
@@ -73,9 +76,7 @@ const App: FC = () => {
 
           <Box sx={{ mt: 3 }}>
             <AddTaskForm onAddTask={addTask} />
-
             <TaskFilter currentFilter={filter} onFilterChange={setFilter} />
-
             <TaskList
               tasks={filteredTasks}
               onToggleComplete={toggleTaskCompletion}
@@ -85,7 +86,7 @@ const App: FC = () => {
           </Box>
         </Container>
       </ThemeProvider>
-    </>
+    </LocalizationProvider>
   );
 };
 

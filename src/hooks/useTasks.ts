@@ -22,7 +22,7 @@ export function useTasks() {
     }
   }, [tasks]);
 
-  const addTask = useCallback((text: string) => {
+  const addTask = useCallback((text: string, dueDate: string | null = null) => {
     if (!text.trim()) {
       return;
     }
@@ -30,6 +30,7 @@ export function useTasks() {
       id: Date.now().toString(),
       text: text,
       completed: false,
+      dueDate: dueDate,
     };
     setTasks((prevTasks) => [newTask, ...prevTasks]);
   }, []);
@@ -55,11 +56,20 @@ export function useTasks() {
     );
   }, []);
 
+  const setTaskDueDate = useCallback((id: string, dueDate: string | null) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, dueDate: dueDate } : task
+      )
+    );
+  }, []);
+
   return {
     tasks,
     addTask,
     toggleTaskCompletion,
     deleteTask,
     editTask,
+    setTaskDueDate,
   };
 }
