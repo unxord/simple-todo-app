@@ -46,10 +46,20 @@ export function useTasks() {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   }, []);
 
+  const editTask = useCallback((id: string, newText: string) => {
+    if (!newText.trim()) return;
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, text: newText.trim() } : task
+      )
+    );
+  }, []);
+
   return {
     tasks,
     addTask,
     toggleTaskCompletion,
     deleteTask,
+    editTask,
   };
 }

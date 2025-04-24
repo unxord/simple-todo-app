@@ -12,12 +12,11 @@ import {
 } from '@mui/material';
 
 const App: FC = () => {
-  const { tasks, addTask, toggleTaskCompletion, deleteTask } = useTasks();
+  const { tasks, addTask, toggleTaskCompletion, deleteTask, editTask } = useTasks();
 
   return (
     <>
       <CssBaseline />
-
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -43,6 +42,7 @@ const App: FC = () => {
             tasks={tasks}
             onToggleComplete={toggleTaskCompletion}
             onDelete={deleteTask}
+            onEdit={editTask}
           />
         </Box>
       </Container>
