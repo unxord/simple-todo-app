@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ITask } from '../types';
+import { ITask, PriorityLevel } from '../types';
 
 const LOCAL_STORAGE_KEY = 'react-todo-list-tasks';
 
@@ -22,7 +22,7 @@ export function useTasks() {
     }
   }, [tasks]);
 
-  const addTask = useCallback((text: string, dueDate: string | null = null) => {
+  const addTask = useCallback((text: string, dueDate: string | null = null, priority: PriorityLevel = 'medium') => {
     if (!text.trim()) {
       return;
     }
@@ -31,6 +31,7 @@ export function useTasks() {
       text: text,
       completed: false,
       dueDate: dueDate,
+      priority: priority,
     };
     setTasks((prevTasks) => [newTask, ...prevTasks]);
   }, []);
@@ -64,6 +65,14 @@ export function useTasks() {
     );
   }, []);
 
+  const setTaskPriority = useCallback((id: string, priority: PriorityLevel) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, priority: priority } : task
+      )
+    );
+  }, []);
+
   return {
     tasks,
     addTask,
@@ -71,5 +80,6 @@ export function useTasks() {
     deleteTask,
     editTask,
     setTaskDueDate,
+    setTaskPriority,
   };
 }

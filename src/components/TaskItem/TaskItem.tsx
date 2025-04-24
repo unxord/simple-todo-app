@@ -1,6 +1,6 @@
 import React, { FC, memo, useState, useRef, useEffect } from 'react';
-import { ITask } from '../../types';
-import { ListItem, ListItemText, Checkbox, IconButton, ListItemIcon, TextField, Box, Stack, Typography } from '@mui/material';
+import { ITask, PriorityLevel } from '../../types';
+import { ListItem, ListItemText, Checkbox, IconButton, ListItemIcon, TextField, Box, Stack, Typography, Chip } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
@@ -14,6 +14,15 @@ interface TaskItemProps {
   onDelete: (id: string) => void;
   onEdit: (id: string, newText: string) => void;
 }
+
+const getPriorityChipColor = (priority?: PriorityLevel): ('success' | 'warning' | 'error' | 'default') => {
+  switch (priority) {
+      case 'high': return 'error';
+      case 'medium': return 'warning';
+      case 'low': return 'success';
+      default: return 'default';
+  }
+};
 
 const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete, onEdit }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -78,6 +87,7 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
   };
 
   const formattedDate = task.dueDate ? formatDueDate(task.dueDate) : null;
+  const chipColor = getPriorityChipColor(task.priority);
 
   return (
     <ListItem
@@ -130,15 +140,25 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
              onBlur={handleSave}
          />
       ) : (
-        <Stack sx={{ width: '100%', pr: 1, my: 0.5 }}>
-          <ListItemText id={`task-label-${task.id}`} primary={task.text} sx={{
-            textDecoration: task.completed ? 'line-through' : 'none',
-            color: task.completed ? 'text.disabled' : 'text.primary',
-            wordBreak: 'break-word',
-              mt: 0,
-              mb: formattedDate ? 0 : 0,
-            }}
-          />
+        <Stack sx={{ width: '100%', pr: { xs: 10, sm: 10 }, my: 0.5 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: formattedDate ? 0.5 : 0 }}>
+            <ListItemText id={`task-label-${task.id}`} primary={task.text} sx={{
+              textDecoration: task.completed ? 'line-through' : 'none',
+              color: task.completed ? 'text.disabled' : 'text.primary',
+              wordBreak: 'break-word',
+                mt: 0,
+                mb: formattedDate ? 0 : 0,
+              }}
+            />
+            {task.priority && (
+              <Chip
+                  label={task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
+                  color={chipColor}
+                  size="small"
+                  sx={{ ml: 1, height: '20px' }}
+              />
+            )}
+          </Box>
           {formattedDate && (
             <Typography variant="caption" display="flex" alignItems="center" color="text.secondary" sx={{ mt: 0.5 }}>
               <CalendarTodayIcon sx={{ fontSize: '0.875rem', mr: 0.5 }} />
