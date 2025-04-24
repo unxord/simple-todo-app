@@ -3,3 +3,5 @@ export interface ITask {
     text: string;
     completed: boolean;
   }
+
+export type FilterValue = 'all' | 'active' | 'completed';
