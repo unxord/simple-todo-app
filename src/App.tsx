@@ -62,7 +62,7 @@ const sensors = useSensors(
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              To-Do List MUI
+              To-Do List
             </Typography>
             <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit" title={`Switch to ${mode === 'light' ? 'dark' : 'light'} mode`}>
               {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}

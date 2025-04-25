@@ -1,11 +1,12 @@
 import React, { FC, memo, useState, useRef, useEffect } from 'react';
 import { ITask, PriorityLevel } from '../../types';
-import { ListItem, ListItemText, Checkbox, IconButton, ListItemIcon, TextField, Box, Stack, Typography, Chip } from '@mui/material';
+import { ListItem, ListItemText, Checkbox, IconButton, ListItemIcon, TextField, Box, Stack, Typography, Chip, useTheme, useMediaQuery } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { format, parseISO, isValid } from 'date-fns';
 
 import { useSortable } from '@dnd-kit/sortable';
@@ -108,12 +109,15 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
     zIndex: isDragging ? 10 : 'auto',
   };
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <ListItem
       ref={setNodeRef}
       style={style}
       {...attributes}
-      {...listeners}
+      {...(!isMobile ? listeners : {})}
       secondaryAction={
         <Box sx={{ display: 'flex', gap: 0.5 }}>
           {isEditing ? (
@@ -139,15 +143,25 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
       }
       disablePadding
       sx={{
-        touchAction: 'none',
+        ...(!isMobile ? { touchAction: 'none' } : {}),
         position: 'relative',
         backgroundColor: isDragging ? 'action.hover' : 'transparent',
         border: '1px dashed transparent',
         '&:hover': {
             borderColor: 'action.disabled',
         }
-      }}
-    >
+      }}>
+      {isMobile && (
+        <IconButton
+            {...listeners}
+            size="small"
+            aria-label="Drag task handle"
+            title="Drag to reorder"
+            sx={{ cursor: 'grab', touchAction: 'none', mr: 0.5 }}
+        >
+            <DragIndicatorIcon />
+        </IconButton>
+      )}
       <ListItemIcon sx={{ minWidth: 0 }}>
         <Checkbox
           edge="start"
