@@ -118,29 +118,6 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
       style={style}
       {...attributes}
       {...(!isMobile ? listeners : {})}
-      secondaryAction={
-        <Box sx={{ display: 'flex', gap: 0.5 }}>
-          {isEditing ? (
-            <>
-              <IconButton edge="end" aria-label="save task" onClick={handleSave} title="Save changes">
-                <CheckIcon />
-              </IconButton>
-              <IconButton edge="end" aria-label="cancel editing" onClick={handleCancel} title="Cancel changes">
-                <CloseIcon />
-              </IconButton>
-            </>
-          ) : (
-            <>
-              <IconButton edge="end" aria-label="edit task" onClick={handleEditClick} title="Edit task">
-                <EditIcon />
-              </IconButton>
-              <IconButton edge="end" aria-label="delete task" onClick={handleDelete} title="Delete task">
-                <DeleteOutlineIcon />
-              </IconButton>
-            </>
-          )}
-        </Box>
-      }
       disablePadding
       sx={{
         ...(!isMobile ? { touchAction: 'none' } : {}),
@@ -174,6 +151,7 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
           sx={{ ml: 'auto', mr: 'auto' }}
         />
       </ListItemIcon>
+      <Stack direction="row" spacing={1} alignItems="center" sx={{ width: '100%' }}>
       {isEditing ? (
          <TextField
              inputRef={editInputRef}
@@ -187,7 +165,7 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
              onBlur={handleSave}
          />
       ) : (
-        <Stack sx={{ width: '100%', pr: { xs: 10, sm: 10 }, my: 0.5 }}>
+        <Stack sx={{ width: '100%', pr: { sm: 1 }, my: 0.5 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: formattedDate ? 0.5 : 0 }}>
             <ListItemText id={`task-label-${task.id}`} primary={task.text} sx={{
               textDecoration: task.completed ? 'line-through' : 'none',
@@ -215,6 +193,28 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
           )}
         </Stack>
       )}
+      <Box sx={{ display: 'flex',  flexDirection: 'column', flexShrink: 0 }}>
+        {isEditing ? (
+          <>
+            <IconButton size="small" aria-label="save task" onClick={handleSave} title="Save changes">
+              <CheckIcon />
+            </IconButton>
+            <IconButton size="small" aria-label="cancel editing" onClick={handleCancel} title="Cancel changes">
+              <CloseIcon />
+            </IconButton>
+          </>
+        ) : (
+          <>
+            <IconButton size="small" aria-label="edit task" onClick={handleEditClick} title="Edit task">
+              <EditIcon />
+            </IconButton>
+            <IconButton size="small" aria-label="delete task" onClick={handleDelete} title="Delete task">
+              <DeleteOutlineIcon />
+            </IconButton>
+          </>
+        )}
+        </Box>
+      </Stack>
     </ListItem>
   );
 };
