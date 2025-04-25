@@ -139,6 +139,7 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
       }
       disablePadding
       sx={{
+        touchAction: 'none',
         position: 'relative',
         backgroundColor: isDragging ? 'action.hover' : 'transparent',
         border: '1px dashed transparent',
@@ -147,7 +148,7 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
         }
       }}
     >
-      <ListItemIcon sx={{ minWidth: 0, mr: 1.5 }}>
+      <ListItemIcon sx={{ minWidth: 0 }}>
         <Checkbox
           edge="start"
           checked={task.completed}
@@ -156,6 +157,7 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
           disableRipple
           inputProps={{ 'aria-labelledby': `task-label-${task.id}` }}
           disabled={isEditing}
+          sx={{ ml: 'auto', mr: 'auto' }}
         />
       </ListItemIcon>
       {isEditing ? (
@@ -187,6 +189,7 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
                   color={chipColor}
                   size="small"
                   sx={{ ml: 1, height: '20px' }}
+                  variant="outlined"
               />
             )}
           </Box>

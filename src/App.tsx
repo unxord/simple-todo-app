@@ -48,14 +48,12 @@ const App: FC = () => {
     }
   });
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-        activationConstraint: {
-            distance: 8,
-        },
-    }),
-    useSensor(KeyboardSensor)
-  );
+const sensors = useSensors(
+  useSensor(PointerSensor, {
+    activationConstraint: { distance: 8 },
+  }),
+  useSensor(KeyboardSensor)
+);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
