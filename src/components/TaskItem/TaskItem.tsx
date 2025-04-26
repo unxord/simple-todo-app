@@ -93,6 +93,15 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
   const formattedDate = task.dueDate ? formatDueDate(task.dueDate) : null;
   const chipColor = getPriorityChipColor(task.priority);
 
+  const getPriorityDotColor = (theme: any, priority?: PriorityLevel) => {
+    switch (priority) {
+        case 'high': return theme.palette.error.main;
+        case 'medium': return theme.palette.warning.main;
+        case 'low': return theme.palette.success.main;
+        default: return theme.palette.action.disabledBackground;
+    }
+  };
+
   const {
     attributes,
     listeners,
@@ -101,6 +110,8 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
     transition,
     isDragging,
   } = useSortable({ id: task.id });
+
+  const conditionalListeners = isEditing ? undefined : listeners;
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -117,7 +128,7 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
       ref={setNodeRef}
       style={style}
       {...attributes}
-      {...(!isMobile ? listeners : {})}
+      {...(!isMobile ? conditionalListeners : {})}
       disablePadding
       sx={{
         ...(!isMobile ? { touchAction: 'none' } : {}),
@@ -175,14 +186,25 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
                 mb: formattedDate ? 0 : 0,
               }}
             />
-            {task.priority && (
+            {isMobile ? (<Box
+              component="span"
+              sx={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: '50%',
+                  backgroundColor: (theme) => getPriorityDotColor(theme, task.priority),
+                  flexShrink: 0,
+                  ml: 1
+              }}
+              title={`Priority: ${task.priority}`}
+            />) : (
               <Chip
-                  label={task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
-                  color={chipColor}
-                  size="small"
-                  sx={{ ml: 1, height: '20px' }}
-                  variant="outlined"
-              />
+                    label={task.priority ? task.priority.charAt(0).toUpperCase() + task.priority.slice(1) : 'None'}
+                    color={chipColor}
+                    size="small"
+                    sx={{ ml: 1, height: '20px' }}
+                    variant="outlined"
+                />
             )}
           </Box>
           {formattedDate && (
