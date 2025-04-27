@@ -3,6 +3,7 @@ import { ITask } from '../../types';
 import { TaskItem } from '../TaskItem/TaskItem';
 import { List, Box, Typography, Divider } from '@mui/material';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useTranslation } from 'react-i18next';
 
 interface TaskListProps {
   tasks: ITask[];
@@ -17,9 +18,9 @@ export const TaskList: FC<TaskListProps> = ({
   onToggleComplete,
   onDelete,
   onEdit,
-  title = 'Tasks',
 }) => {
-
+  const { t } = useTranslation();
+  const title = t('taskList.title');
   const taskIds = tasks.map(task => task.id);
 
   return (
@@ -32,7 +33,7 @@ export const TaskList: FC<TaskListProps> = ({
 
       {tasks.length === 0 ? (
         <Typography variant="body1" color="text.secondary" align="center">
-          No tasks yet. Add one above!
+          {t('taskList.empty')}
         </Typography>
       ) : (
         <SortableContext items={taskIds} strategy={verticalListSortingStrategy}>

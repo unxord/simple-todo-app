@@ -1,0 +1,35 @@
+{
+    "appTitle": "Список задач",
+    "pageTitle": "Мои задачи",
+    "addTaskLabel": "Новая задача",
+    "addTaskButton": "Добавить",
+    "emptyList": "Задач пока нет. Добавьте новую!",
+    "validation": {
+        "taskTextRequired": "Текст задачи не может быть пустым"
+    },
+    "taskList": {
+        "title": "Задачи",
+        "empty": "Задач пока нет. Добавьте новую!"
+    },
+    "filterAll": "Все",
+    "filterActive": "Активные",
+    "filterCompleted": "Завершенные",
+    "taskActions": {
+      "edit": "Редактировать задачу",
+      "delete": "Удалить задачу",
+      "save": "Сохранить изменения",
+      "cancel": "Отменить изменения"
+    },
+    "priority": "Приоритет",
+    "priorityLow": "Низкий",
+    "priorityMedium": "Средний",
+    "priorityHigh": "Высокий",
+    "dueDateLabel": "Дата",
+    "toggleTheme": "Переключить на {{mode}} тему",
+    "theme": {
+        "light": "светлая",
+        "dark": "темная"
+    },
+    "toggleLang": "Переключить на Английский",
+    "currentLang": "РУС"
+  }

@@ -9,6 +9,8 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { format, parseISO, isValid } from 'date-fns';
 
+import { useTranslation } from 'react-i18next';
+
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
@@ -29,6 +31,8 @@ const getPriorityChipColor = (priority?: PriorityLevel): ('success' | 'warning' 
 };
 
 const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete, onEdit }) => {
+  const { t } = useTranslation();
+  
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(task.text);
   const editInputRef = useRef<HTMLInputElement>(null);
@@ -123,6 +127,11 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const getPriorityTranslationKey = (priority?: PriorityLevel): string => {
+    if (!priority) return '';
+    return `priority${priority.charAt(0).toUpperCase() + priority.slice(1)}`;
+  }
+
   return (
     <ListItem
       ref={setNodeRef}
@@ -162,7 +171,7 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
           sx={{ ml: 'auto', mr: 'auto' }}
         />
       </ListItemIcon>
-      <Stack direction="row" spacing={1} alignItems="center" sx={{ width: '100%' }}>
+      <Stack direction="row" spacing={0} alignItems="center" sx={{ width: '100%' }}>
       {isEditing ? (
          <TextField
              inputRef={editInputRef}
@@ -186,7 +195,7 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
                 mb: formattedDate ? 0 : 0,
               }}
             />
-            {isMobile ? (<Box
+            {/* {isMobile ? (<Box
               component="span"
               sx={{
                   width: 10,
@@ -199,13 +208,13 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
               title={`Priority: ${task.priority}`}
             />) : (
               <Chip
-                    label={task.priority ? task.priority.charAt(0).toUpperCase() + task.priority.slice(1) : 'None'}
+                    label={t(getPriorityTranslationKey(task.priority))}
                     color={chipColor}
                     size="small"
                     sx={{ ml: 1, height: '20px' }}
                     variant="outlined"
                 />
-            )}
+            )} */}
           </Box>
           {formattedDate && (
             <Typography variant="caption" display="flex" alignItems="center" color="text.secondary" sx={{ mt: 0.5 }}>
@@ -215,22 +224,42 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
           )}
         </Stack>
       )}
+      {isMobile ? (<Box
+              component="span"
+              sx={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: '50%',
+                  backgroundColor: (theme) => getPriorityDotColor(theme, task.priority),
+                  flexShrink: 0,
+                  margin: 1,
+              }}
+              title={`Priority: ${task.priority}`}
+            />) : (
+              <Chip
+                    label={t(getPriorityTranslationKey(task.priority))}
+                    color={chipColor}
+                    size="small"
+                    sx={{ margin: 1, height: '20px' }}
+                    variant="outlined"
+                />
+            )}
       <Box sx={{ display: 'flex',  flexDirection: 'column', flexShrink: 0 }}>
         {isEditing ? (
           <>
-            <IconButton size="small" aria-label="save task" onClick={handleSave} title="Save changes">
+            <IconButton size="small" aria-label="save task" onClick={handleSave} title={t('taskActions.save')}>
               <CheckIcon />
             </IconButton>
-            <IconButton size="small" aria-label="cancel editing" onClick={handleCancel} title="Cancel changes">
+            <IconButton size="small" aria-label="cancel editing" onClick={handleCancel} title={t('taskActions.cancel')}>
               <CloseIcon />
             </IconButton>
           </>
         ) : (
           <>
-            <IconButton size="small" aria-label="edit task" onClick={handleEditClick} title="Edit task">
+            <IconButton size="small" aria-label="edit task" onClick={handleEditClick} title={t('taskActions.edit')}>
               <EditIcon />
             </IconButton>
-            <IconButton size="small" aria-label="delete task" onClick={handleDelete} title="Delete task">
+            <IconButton size="small" aria-label="delete task" onClick={handleDelete} title={t('taskActions.delete')}>
               <DeleteOutlineIcon />
             </IconButton>
           </>

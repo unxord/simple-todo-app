@@ -5,6 +5,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { format } from 'date-fns';
 import { PriorityLevel } from '../../types';
+import { useTranslation } from 'react-i18next';
 
 interface IFormData {
   taskText: string;
@@ -17,6 +18,9 @@ interface AddTaskFormProps {
 const priorityLevels: PriorityLevel[] = ['low', 'medium', 'high'];
 
 export const AddTaskForm: FC<AddTaskFormProps> = ({ onAddTask }) => {
+
+  const { t } = useTranslation()
+
   const {
     handleSubmit,
     control,
@@ -41,11 +45,11 @@ export const AddTaskForm: FC<AddTaskFormProps> = ({ onAddTask }) => {
         <Controller
           name="taskText"
           control={control}
-          rules={{ required: 'Task text cannot be empty' }}
+          rules={{ required: t('validation.taskTextRequired') }}
           render={({ field }) => (
             <TextField
               {...field}
-              label="New Task"
+              label={t('addTaskLabel')}
               variant="outlined"
               size="small"
               fullWidth
@@ -56,7 +60,7 @@ export const AddTaskForm: FC<AddTaskFormProps> = ({ onAddTask }) => {
         />
 
         <DatePicker
-          label="Due Date"
+          label={t('dueDateLabel')}
           value={dueDate}
           onChange={(newValue) => setDueDate(newValue)}
           minDate={new Date()}
@@ -70,11 +74,11 @@ export const AddTaskForm: FC<AddTaskFormProps> = ({ onAddTask }) => {
         />
 
         <FormControl size="small" sx={{ minWidth: { xs: '100%', sm: 120 } }}>
-          <InputLabel id="priority-select-label">Priority</InputLabel>
-          <Select labelId="priority-select-label" id="priority-select" value={priority} label="Priority" onChange={(e) => setPriority(e.target.value as PriorityLevel)}>
+          <InputLabel id="priority-select-label">{t('priority')}</InputLabel>
+          <Select labelId="priority-select-label" id="priority-select" value={priority} label={t('priority')} onChange={(e) => setPriority(e.target.value as PriorityLevel)}>
               {priorityLevels.map((level) => (
                 <MenuItem key={level} value={level}>
-                    {level.charAt(0).toUpperCase() + level.slice(1)}
+                    {t(`priority${level.charAt(0).toUpperCase() + level.slice(1)}` as any)}
                 </MenuItem>
               ))}
           </Select>
@@ -86,7 +90,7 @@ export const AddTaskForm: FC<AddTaskFormProps> = ({ onAddTask }) => {
           size="large"
           sx={{ flexShrink: 0, alignSelf: {xs: 'stretch', sm: 'flex-start'}, '& .MuiButton-startIcon': { margin: 0 }}}
           startIcon={<AddCircleOutlineIcon />}
-          aria-label="Add task"
+          aria-label={t('addTaskButton')}
         >
         </Button>
       </Stack>

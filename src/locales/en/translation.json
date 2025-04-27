@@ -1,0 +1,35 @@
+{
+    "appTitle": "To-Do List",
+    "pageTitle": "My Tasks",
+    "addTaskLabel": "New Task",
+    "addTaskButton": "Add",
+    "emptyList": "No tasks yet. Add one above!",
+    "validation": {
+        "taskTextRequired": "Task text cannot be empty"
+    },
+    "taskList": {
+        "title": "Tasks",
+        "empty": "No tasks yet. Add one above!"
+    },
+    "filterAll": "All",
+    "filterActive": "Active",
+    "filterCompleted": "Completed",
+    "taskActions": {
+      "edit": "Edit task",
+      "delete": "Delete task",
+      "save": "Save changes",
+      "cancel": "Cancel changes"
+    },
+    "priority": "Priority",
+    "priorityLow": "Low",
+    "priorityMedium": "Medium",
+    "priorityHigh": "High",
+    "dueDateLabel": "Due Date",
+    "toggleTheme": "Switch to {{mode}} mode",
+    "theme": {
+        "light": "light",
+        "dark": "dark"
+    },
+    "toggleLang": "Switch to Russian",
+    "currentLang": "ENG"
+  }
