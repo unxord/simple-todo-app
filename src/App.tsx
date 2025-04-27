@@ -14,12 +14,19 @@ import LanguageIcon from '@mui/icons-material/Language';
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { ru } from 'date-fns/locale';
+import { ru } from 'date-fns/locale/ru';
+import { enUS } from 'date-fns/locale/en-US';
+import { Locale } from 'date-fns';
 
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { useTranslation } from 'react-i18next';
 
 const THEME_MODE_STORAGE_KEY = 'react-todo-app-theme-mode';
+
+const dateLocales: { [key: string]: Locale } = {
+  en: enUS,
+  ru: ru,
+};
 
 const App: FC = () => {
   const { tasks, addTask, toggleTaskCompletion, deleteTask, editTask, handleDragEnd } = useTasks();
@@ -67,8 +74,11 @@ const App: FC = () => {
 
   const targetThemeMode = mode === 'light' ? t('theme.dark') : t('theme.light');
 
+  const currentLangCode = i18n.language.split('-')[0];
+  const currentLocale = dateLocales[currentLangCode] || enUS;
+
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={i18n.language === 'ru' ? ru : undefined}>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={currentLocale}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AppBar position="static">
