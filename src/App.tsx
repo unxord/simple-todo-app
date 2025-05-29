@@ -30,7 +30,7 @@ const dateLocales: { [key: string]: Locale } = {
 
 const App: FC = () => {
   const { tasks, addTask, toggleTaskCompletion, deleteTask, editTask, handleDragEnd } = useTasks();
-  const [filter, setFilter] = useState<FilterValue>('all');
+  const [filter, setFilter] = useState<FilterValue>('active');
 
   const [mode, setMode] = useState<'light' | 'dark'>(() => {
     const savedMode = localStorage.getItem(THEME_MODE_STORAGE_KEY);
