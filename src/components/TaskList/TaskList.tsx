@@ -1,9 +1,11 @@
 import React, { FC } from 'react';
 import { ITask } from '../../types';
 import { TaskItem } from '../TaskItem/TaskItem';
-import { List, Box, Typography, Divider } from '@mui/material';
+import { List, Box, Typography, Divider, Button } from '@mui/material';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useTranslation } from 'react-i18next';
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import { FilterValue } from '../../types';
 
 interface TaskListProps {
   tasks: ITask[];
@@ -11,7 +13,8 @@ interface TaskListProps {
   onDelete: (id: string) => void;
   onEdit: (id: string, newText: string) => void;
   title?: string;
-  currentFilter: string;
+  currentFilter: FilterValue;
+  onDeleteAll: (filter: FilterValue) => void;
 }
 
 export const TaskList: FC<TaskListProps> = ({
@@ -20,6 +23,7 @@ export const TaskList: FC<TaskListProps> = ({
   onDelete,
   onEdit,
   currentFilter,
+  onDeleteAll,
 }) => {
   const { t } = useTranslation();
   const title = t('taskList.title');
@@ -28,9 +32,20 @@ export const TaskList: FC<TaskListProps> = ({
   return (
     <Box sx={{ width: '100%', mt: 2 }}>
       {title && (
-        <Typography variant="h6" component="h2" gutterBottom>
-          {title}
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Typography variant="h6" component="h2">
+            {title}
+          </Typography>
+          <Button
+            variant="outlined"
+            color="error"
+            startIcon={<DeleteSweepIcon />}
+            onClick={() => onDeleteAll(currentFilter)}
+            size="small"
+          >
+            {t('deleteAll')}
+          </Button>
+        </Box>
       )}
 
       {tasks.length === 0 ? (

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ITask, PriorityLevel } from '../types';
+import { ITask, PriorityLevel, FilterValue } from '../types';
 
 import { DragEndEvent } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
@@ -93,6 +93,19 @@ export function useTasks() {
     }
   }, []);
 
+  const deleteAllTasksInFilter = useCallback((filter: FilterValue) => {
+    setTasks((prevTasks) => {
+      switch (filter) {
+        case 'active':
+          return prevTasks.filter(task => task.completed);
+        case 'completed':
+          return prevTasks.filter(task => !task.completed);
+        default:
+          return [];
+      }
+    });
+  }, []);
+
   return {
     tasks,
     addTask,
@@ -102,5 +115,6 @@ export function useTasks() {
     setTaskDueDate,
     setTaskPriority,
     handleDragEnd,
+    deleteAllTasksInFilter,
   };
 }

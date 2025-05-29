@@ -29,7 +29,7 @@ const dateLocales: { [key: string]: Locale } = {
 };
 
 const App: FC = () => {
-  const { tasks, addTask, toggleTaskCompletion, deleteTask, editTask, handleDragEnd } = useTasks();
+  const { tasks, addTask, toggleTaskCompletion, deleteTask, editTask, handleDragEnd, deleteAllTasksInFilter } = useTasks();
   const [filter, setFilter] = useState<FilterValue>('active');
 
   const [mode, setMode] = useState<'light' | 'dark'>(() => {
@@ -108,13 +108,17 @@ const App: FC = () => {
 
             <Box sx={{ mt: 3 }}>
               <AddTaskForm onAddTask={addTask} />
-              <TaskFilter currentFilter={filter} onFilterChange={setFilter} />
+              <TaskFilter 
+                currentFilter={filter} 
+                onFilterChange={setFilter}
+              />
               <TaskList
                 tasks={filteredTasks}
                 onToggleComplete={toggleTaskCompletion}
                 onDelete={deleteTask}
                 onEdit={editTask}
                 currentFilter={filter}
+                onDeleteAll={deleteAllTasksInFilter}
               />
             </Box>
           </Container>

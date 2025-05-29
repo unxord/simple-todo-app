@@ -14,6 +14,7 @@
     "filterAll": "All",
     "filterActive": "Active",
     "filterCompleted": "Completed",
+    "deleteAll": "Delete All",
     "taskActions": {
       "edit": "Edit task",
       "delete": "Delete task",
