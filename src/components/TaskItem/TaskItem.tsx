@@ -53,6 +53,11 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
       setTimeout(() => {
         onToggleComplete(task.id);
       }, 500);
+    } else if (task.completed && currentFilter === 'completed') {
+      setIsAnimating(true);
+      setTimeout(() => {
+        onToggleComplete(task.id);
+      }, 500);
     } else {
       onToggleComplete(task.id);
     }
@@ -158,7 +163,7 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
         },
         '&.task-completing': {
           transition: 'transform 0.5s ease-out, opacity 0.5s ease-out',
-          transform: 'translateX(100%)',
+          transform: currentFilter === 'active' ? 'translateX(100%)' : 'translateX(-100%)',
           opacity: 0,
         }
       }}
