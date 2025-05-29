@@ -19,6 +19,7 @@ interface TaskItemProps {
   onToggleComplete: (id: string) => void;
   onDelete: (id: string) => void;
   onEdit: (id: string, newText: string) => void;
+  currentFilter: string;
 }
 
 const getPriorityChipColor = (priority?: PriorityLevel): ('success' | 'warning' | 'error' | 'default') => {
@@ -30,11 +31,12 @@ const getPriorityChipColor = (priority?: PriorityLevel): ('success' | 'warning' 
   }
 };
 
-const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete, onEdit }) => {
+const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete, onEdit, currentFilter }) => {
   const { t } = useTranslation();
   
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(task.text);
+  const [isAnimating, setIsAnimating] = useState(false);
   const editInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -46,7 +48,14 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
 
 
   const handleToggle = () => {
-    onToggleComplete(task.id);
+    if (!task.completed && currentFilter === 'active') {
+      setIsAnimating(true);
+      setTimeout(() => {
+        onToggleComplete(task.id);
+      }, 500);
+    } else {
+      onToggleComplete(task.id);
+    }
   };
 
   const handleDelete = () => {
@@ -146,8 +155,14 @@ const TaskItemComponent: FC<TaskItemProps> = ({ task, onToggleComplete, onDelete
         border: '1px dashed transparent',
         '&:hover': {
             borderColor: 'action.disabled',
+        },
+        '&.task-completing': {
+          transition: 'transform 0.5s ease-out, opacity 0.5s ease-out',
+          transform: 'translateX(100%)',
+          opacity: 0,
         }
-      }}>
+      }}
+      className={isAnimating ? 'task-completing' : ''}>
       {isMobile && (
         <IconButton
             {...listeners}

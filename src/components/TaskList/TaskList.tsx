@@ -11,6 +11,7 @@ interface TaskListProps {
   onDelete: (id: string) => void;
   onEdit: (id: string, newText: string) => void;
   title?: string;
+  currentFilter: string;
 }
 
 export const TaskList: FC<TaskListProps> = ({
@@ -18,6 +19,7 @@ export const TaskList: FC<TaskListProps> = ({
   onToggleComplete,
   onDelete,
   onEdit,
+  currentFilter,
 }) => {
   const { t } = useTranslation();
   const title = t('taskList.title');
@@ -45,6 +47,7 @@ export const TaskList: FC<TaskListProps> = ({
                   onToggleComplete={onToggleComplete}
                   onDelete={onDelete}
                   onEdit={onEdit}
+                  currentFilter={currentFilter}
                 />
                 {index < tasks.length - 1 && <Divider component="li" variant="inset" />}
               </React.Fragment>

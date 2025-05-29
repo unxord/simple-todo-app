@@ -114,6 +114,7 @@ const App: FC = () => {
                 onToggleComplete={toggleTaskCompletion}
                 onDelete={deleteTask}
                 onEdit={editTask}
+                currentFilter={filter}
               />
             </Box>
           </Container>
